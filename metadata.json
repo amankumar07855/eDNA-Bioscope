@@ -1,0 +1,6 @@
+{
+  "name": "EcoDNA AI",
+  "description": "Environmental DNA Taxonomy & Biodiversity Intelligence Platform (Problem Statement ID: 25042). Explore. Identify. Preserve.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

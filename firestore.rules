@@ -1,0 +1,127 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global Safety Net (Default Deny)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Core Hardened Primitives
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isBootstrapAdmin() {
+      return isSignedIn()
+        && request.auth.token.email == 'singhsujit07855@gmail.com'
+        && request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+        isBootstrapAdmin()
+      );
+    }
+
+    function isValidUserCategory(cat) {
+      return cat in [
+        'Researcher',
+        'Student',
+        'Environmental Scientist',
+        'Conservation Professional',
+        'Academic Institution',
+        'Other'
+      ];
+    }
+
+    function isValidPreferences(prefs) {
+      return prefs is map
+        && prefs.keys().hasOnly(['defaultMarker', 'emailNotifications'])
+        && (!('defaultMarker' in prefs) || (prefs.defaultMarker is string && prefs.defaultMarker.size() <= 24))
+        && (!('emailNotifications' in prefs) || prefs.emailNotifications is bool);
+    }
+
+    function isValidUserProfile(data) {
+      return data.keys().hasAll(['uid', 'fullName', 'email', 'country', 'userCategory', 'emailVerified', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['uid', 'fullName', 'email', 'country', 'institution', 'userCategory', 'emailVerified', 'profileImageUrl', 'preferences', 'createdAt', 'updatedAt'])
+        && data.uid is string && data.uid.size() >= 1 && data.uid.size() <= 128 && data.uid.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.fullName is string && data.fullName.size() >= 2 && data.fullName.size() <= 120
+        && data.email is string && data.email.size() >= 5 && data.email.size() <= 254
+        && data.country is string && data.country.size() >= 2 && data.country.size() <= 100
+        && (!('institution' in data) || (data.institution is string && data.institution.size() <= 160))
+        && isValidUserCategory(data.userCategory)
+        && data.emailVerified is bool
+        && (!('profileImageUrl' in data) || (data.profileImageUrl is string && data.profileImageUrl.size() <= 500))
+        && (!('preferences' in data) || isValidPreferences(data.preferences))
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    // Connectivity test document (read-only single doc check)
+    match /test/connection {
+      allow get: if true;
+      allow list, write: if false;
+    }
+
+    // Researcher user profiles: strictly isolated PII, zero client-writable role fields
+    match /users/{userId} {
+      allow get: if isValidId(userId) && (isOwner(userId) || isAdmin());
+      allow list: if isSignedIn() && (resource.data.uid == request.auth.uid || isBootstrapAdmin());
+
+      allow create: if isSignedIn()
+        && isValidId(userId)
+        && isOwner(userId)
+        && isValidUserProfile(incoming())
+        && incoming().uid == request.auth.uid
+        && incoming().emailVerified == (request.auth.token.email_verified == true)
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+
+      allow update: if isSignedIn()
+        && isValidId(userId)
+        && isOwner(userId)
+        && isValidUserProfile(incoming())
+        && incoming().uid == existing().uid
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().emailVerified == (request.auth.token.email_verified == true)
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'fullName',
+          'country',
+          'institution',
+          'userCategory',
+          'emailVerified',
+          'profileImageUrl',
+          'preferences',
+          'updatedAt'
+        ]);
+
+      allow delete: if false;
+    }
+
+    // Server-managed administrator markers: readable by owner only, NEVER writable from client
+    match /admins/{adminId} {
+      allow get: if isValidId(adminId) && isOwner(adminId);
+      allow list, write: if false;
+    }
+  }
+}

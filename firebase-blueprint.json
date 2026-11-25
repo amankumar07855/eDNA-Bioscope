@@ -1,0 +1,125 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated EcoDNA AI researcher profile stored in Cloud Firestore without privilege or role fields.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Canonical Firebase Authentication UID.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "fullName": {
+          "type": "string",
+          "description": "User full legal or academic name.",
+          "minLength": 2,
+          "maxLength": 120
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Verified account email address.",
+          "minLength": 5,
+          "maxLength": 254
+        },
+        "country": {
+          "type": "string",
+          "description": "Country of residence or research institution.",
+          "minLength": 2,
+          "maxLength": 100
+        },
+        "institution": {
+          "type": "string",
+          "description": "Optional university, lab, or conservation organization.",
+          "maxLength": 160
+        },
+        "userCategory": {
+          "type": "string",
+          "description": "Researcher classification.",
+          "enum": [
+            "Researcher",
+            "Student",
+            "Environmental Scientist",
+            "Conservation Professional",
+            "Academic Institution",
+            "Other"
+          ],
+          "maxLength": 40
+        },
+        "emailVerified": {
+          "type": "boolean",
+          "description": "Mirrored email verification flag."
+        },
+        "profileImageUrl": {
+          "type": "string",
+          "description": "Optional profile avatar URL.",
+          "maxLength": 500
+        },
+        "preferences": {
+          "type": "object",
+          "description": "User research workspace preferences."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of profile creation."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of latest profile update."
+        }
+      },
+      "required": [
+        "uid",
+        "fullName",
+        "email",
+        "country",
+        "userCategory",
+        "emailVerified",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "AdminRecord": {
+      "title": "AdminRecord",
+      "description": "Server-provisioned administrator authorization marker keyed by Firebase UID.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 254
+        },
+        "grantedBy": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "email", "grantedBy", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private researcher profile documents strictly isolated to the owning user or verified administrators."
+    },
+    "/admins/{adminId}": {
+      "schema": { "$ref": "#/entities/AdminRecord" },
+      "description": "Server-managed administrator membership records. Client writes are strictly forbidden."
+    }
+  }
+}

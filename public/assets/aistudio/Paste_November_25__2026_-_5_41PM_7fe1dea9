@@ -1,0 +1,1213 @@
+Worked for 1m 15s
+
+For your project, we'll use EcoDNA AI with a proper authentication system, two backend services, a scientific analysis engine, and a separate administrator environment.
+
+The architecture will be:
+
+### EcoDNA AI
+
+Explore • Identify • Preserve
+
+Full-stack scientific platform
+
+Frontend – React + TypeScript
+
+Login • Register • Dashboard • Analysis • Reports
+
+Firebase
+
+Authentication
+
+Cloud Firestore
+
+User profiles and roles
+
+Account metadata
+
+Supabase
+
+PostgreSQL
+
+Scientific datasets
+
+File storage
+
+Backend processing
+
+Scientific & AI Engine
+
+Gemini • NCBI BLAST • Taxonomy • Biodiversity calculations
+
+Results
+
+Taxonomic identification • Biodiversity dashboard • Reports
+
+Important architecture decision: Firebase will handle authentication and user-profile records, while Supabase will be the primary scientific data server. This avoids maintaining two competing databases for the same records.
+
+The admin panel will be hidden from ordinary users, but more importantly, it will have server-side role verification. Simply hiding an admin button is not security.
+
+### 1\. Master prompt for Google AI Studio
+
+Paste this into Google AI Studio → Build mode.
+
+# MASTER APPLICATION DEVELOPMENT PROMPT
+# EcoDNA AI – Environmental DNA Taxonomy & Biodiversity Intelligence Platform
+
+**Problem Statement ID: 25042**
+
+Build a complete, production-oriented, full-stack scientific web application called ECO DNA AI.
+
+Project title: Identifying Taxonomy and Assessing Biodiversity from eDNA Datasets.
+
+Act as an expert full-stack software architect, Firebase developer, Supabase developer, bioinformatics scientist, AI engineer, cybersecurity engineer, and UI/UX designer.
+
+Your task is to build an actual working web application, not a static website, presentation, or UI prototype.
+
+The application must support public user registration, secure login, individual user dashboards, DNA dataset uploads, taxonomic identification, biodiversity assessment, AI-assisted scientific interpretation, reports, and a hidden role-protected administrator panel.
+
+==================================================
+1. BRAND IDENTITY AND APPLICATION DESIGN
+==================================================
+
+Application name: EcoDNA AI
+
+Tagline: Explore. Identify. Preserve.
+
+Use the generated EcoDNA AI logo concept provided as a visual branding reference. Create a consistent visual identity throughout the application.
+
+Logo requirements:
+- A DNA double helix integrated with leaves.
+- Nature and biodiversity elements.
+- Green and turquoise color palette.
+- Scientific and technological appearance.
+- A clean icon that remains recognizable at small sizes.
+- A complete horizontal logo with the text EcoDNA AI.
+- A compact icon-only version for favicon and mobile navigation.
+
+Design a premium scientific platform.
+
+Color palette:
+- Deep forest green.
+- Dark navy.
+- Emerald green.
+- Turquoise.
+- White and light grey.
+- Subtle gradients.
+
+Design style:
+- Modern scientific SaaS platform.
+- Glassmorphism used selectively.
+- Smooth transitions.
+- Professional cards.
+- Clean typography.
+- Responsive layouts.
+- Accessible color contrast.
+
+The application must work on mobile phones, tablets, and desktop computers.
+
+==================================================
+2. TECHNOLOGY STACK AND BACKEND ARCHITECTURE
+==================================================
+
+Frontend:
+- React.js.
+- TypeScript.
+- Vite.
+- Tailwind CSS.
+- Lucide React icons.
+- Recharts for data visualization.
+- React Router for navigation.
+- React Hook Form for form handling.
+- Zod for validation.
+
+Firebase:
+Use Firebase as the identity and user-account management platform.
+
+Implement:
+- Firebase Authentication.
+- Email and password registration.
+- Email and password login.
+- Google sign-in.
+- Email verification.
+- Password reset.
+- User session persistence.
+- Secure logout.
+- Cloud Firestore for user profiles, account metadata, preferences, and role metadata.
+
+Supabase:
+Use Supabase as the main scientific data server.
+
+Implement:
+- Supabase PostgreSQL database.
+- Supabase Storage for FASTA, FASTQ, CSV and report files.
+- Supabase Row Level Security.
+- Supabase Edge Functions for secure backend operations.
+- Database migrations.
+- Proper relational database design.
+- Secure API access.
+
+Backend:
+- Use Supabase Edge Functions or a secure FastAPI processing service for computationally intensive bioinformatics operations.
+- Use asynchronous jobs for long-running DNA sequence analyses.
+- Maintain job status and error logs.
+- Provide REST API endpoints.
+
+Gemini:
+- Integrate the Google Gemini API through secure backend calls.
+- Use Gemini for scientific explanations, report summaries, and interpreting already calculated results.
+- Do not use Gemini as a replacement for DNA sequence alignment or reference databases.
+
+IMPORTANT ARCHITECTURE RULE:
+
+Firebase Authentication is the source of truth for user identity.
+
+Use the Firebase UID as the canonical user identifier throughout the application.
+
+Store user profiles and authentication-related metadata in Firestore.
+
+Store projects, samples, sequences, analysis results, biodiversity metrics, and reports in Supabase PostgreSQL and Supabase Storage.
+
+Use a verified Firebase ID token on every protected Supabase backend request.
+
+Create a secure backend verification layer that validates the Firebase token before allowing access to scientific data.
+
+Do not trust user-supplied UID, email, or role values.
+
+Use server-verified identity for all authorization decisions.
+
+Never place Firebase service-account credentials, Supabase service-role keys, or Gemini API keys in frontend code.
+
+==================================================
+3. PUBLIC LANDING PAGE
+==================================================
+
+Create a professional public homepage.
+
+Sections:
+
+A. Navigation bar:
+- EcoDNA AI logo.
+- Home.
+- About.
+- Features.
+- Scientific Workflow.
+- Contact.
+- Login.
+- Register.
+
+B. Hero section:
+
+Headline:
+"Discover the Hidden Biodiversity in Every DNA Sequence."
+
+Description:
+"An intelligent environmental DNA platform that transforms genetic data into taxonomic insights and biodiversity intelligence."
+
+Buttons:
+- Get Started.
+- Explore Features.
+
+C. Feature cards:
+- DNA Sequence Analysis.
+- AI-Assisted Taxonomic Identification.
+- Biodiversity Assessment.
+- Species Explorer.
+- Geographic Biodiversity Mapping.
+- Scientific Report Generation.
+
+D. Scientific workflow section.
+
+E. About the project section.
+
+F. Why eDNA matters section.
+
+G. Footer with project ID 25042 and relevant navigation links.
+
+==================================================
+4. COMPLETE REGISTRATION SYSTEM
+==================================================
+
+Create a detailed registration page accessible to everyone.
+
+Registration fields:
+
+1. Full name.
+2. Email address.
+3. Password.
+4. Confirm password.
+5. Country.
+6. Institution or college (optional).
+7. User category.
+8. Agree to Terms and Conditions.
+9. Agree to Privacy Policy.
+
+User categories:
+- Researcher.
+- Student.
+- Environmental Scientist.
+- Conservation Professional.
+- Academic Institution.
+- Other.
+
+Registration requirements:
+
+- Validate every field.
+- Validate email format.
+- Password minimum 8 characters.
+- Require a mixture of uppercase, lowercase, numbers, and special characters.
+- Confirm password must match.
+- Show password visibility toggle.
+- Display password strength.
+- Display meaningful validation messages.
+- Prevent duplicate email registration.
+- Require terms acceptance.
+- Show loading state during registration.
+- Show clear success or error messages.
+
+When a user registers:
+
+1. Create the account using Firebase Authentication.
+2. Send email verification.
+3. Create a user profile in Firestore.
+4. Assign the default role "user" on the trusted backend.
+5. Create the corresponding user profile record in Supabase.
+6. Never allow a registration form to choose or assign an administrator role.
+7. After successful registration, direct the user to an email verification screen.
+8. After verification and successful login, open their personal dashboard.
+
+Provide:
+- Register with Email.
+- Continue with Google.
+- Already have an account? Sign in.
+
+==================================================
+5. COMPLETE LOGIN SYSTEM
+==================================================
+
+Create an elegant login interface.
+
+Fields:
+- Email address.
+- Password.
+- Remember me.
+- Forgot password.
+- Show/hide password.
+
+Buttons:
+- Sign In.
+- Continue with Google.
+
+Login functionality:
+
+1. Authenticate through Firebase Authentication.
+2. Verify account status.
+3. Check email verification where required.
+4. Obtain the Firebase ID token.
+5. Verify the token through the backend.
+6. Load the authenticated user's profile.
+7. Determine the user's authorization role through trusted backend data.
+8. Redirect ordinary users to their personal dashboard.
+9. Redirect authorized administrators to the admin dashboard.
+10. Display useful error messages for invalid credentials, disabled accounts, and network errors.
+
+Implement:
+- Session persistence.
+- Automatic session restoration.
+- Secure logout.
+- Protected routes.
+- Token refresh.
+- Session expiration handling.
+
+Do not store plaintext passwords anywhere.
+
+==================================================
+6. FORGOT PASSWORD AND ACCOUNT RECOVERY
+==================================================
+
+Create a complete password recovery workflow.
+
+Steps:
+
+1. User enters registered email.
+2. Firebase sends password-reset email.
+3. Show confirmation message.
+4. User opens the reset link.
+5. User creates a new password.
+6. Validate the new password.
+7. Show password reset success.
+8. Redirect to login.
+
+Also create:
+- Email verification resend.
+- Account profile management.
+- Change password.
+- Update profile information.
+
+==================================================
+7. USER DASHBOARD
+==================================================
+
+Every registered user must have an individual dashboard.
+
+Dashboard cards:
+
+- Total Projects.
+- Total Samples.
+- Total DNA Sequences.
+- Identified Taxa.
+- Species Richness.
+- Latest Analysis Status.
+
+Dashboard sections:
+
+- Recent projects.
+- Recent dataset uploads.
+- Analysis history.
+- Biodiversity overview.
+- Taxonomic distribution.
+- Recent reports.
+- Quick actions.
+
+Quick actions:
+- Create New Project.
+- Upload DNA Dataset.
+- Start Analysis.
+- Explore Species.
+- Generate Report.
+
+All dashboard data must be fetched from the authenticated user's actual database records.
+
+Do not display another user's projects or analysis results.
+
+Provide useful empty states for new users.
+
+==================================================
+8. PROJECT MANAGEMENT
+==================================================
+
+Users must be able to create and manage multiple research projects.
+
+Project fields:
+- Project name.
+- Project description.
+- Research objective.
+- Environmental study type.
+- Geographic region.
+- Start date.
+- Project notes.
+
+Functions:
+- Create project.
+- Edit project.
+- Delete project.
+- View project details.
+- Add multiple samples.
+- Upload datasets.
+- Track analysis history.
+- Generate project reports.
+
+Enforce ownership on the backend.
+
+==================================================
+9. DNA DATASET UPLOAD
+==================================================
+
+Create a fully functional dataset upload module.
+
+Supported formats:
+- FASTA.
+- FA.
+- FNA.
+- FASTQ.
+- FQ.
+- CSV.
+- TSV.
+- JSON.
+
+Support multiple file uploads.
+
+Provide drag-and-drop functionality.
+
+Sample metadata:
+- Sample ID.
+- Sample name.
+- Environmental source.
+- Collection location.
+- Collection date.
+- DNA marker.
+- Research notes.
+
+Environmental sources:
+- River.
+- Lake.
+- Pond.
+- Marine water.
+- Soil.
+- Sediment.
+- Other.
+
+DNA markers:
+- 16S.
+- COI.
+- 12S.
+- 18S.
+- ITS.
+- rbcL.
+- Other.
+
+After upload:
+- Validate file format.
+- Check file size.
+- Parse file contents securely.
+- Count sequences.
+- Detect malformed records.
+- Calculate sequence length statistics.
+- Store original files in Supabase Storage.
+- Store metadata in Supabase PostgreSQL.
+- Display upload progress.
+
+Never silently discard malformed sequences.
+
+Preserve original datasets.
+
+==================================================
+10. DNA SEQUENCE PREPROCESSING
+==================================================
+
+Implement a preprocessing pipeline.
+
+Features:
+- DNA sequence validation.
+- FASTQ quality assessment.
+- Quality filtering.
+- Ambiguous base detection.
+- Duplicate detection.
+- Sequence length statistics.
+- Configurable filtering parameters.
+
+Display:
+- Total sequences.
+- Valid sequences.
+- Invalid sequences.
+- Filtered sequences.
+- Duplicate sequences.
+- Average length.
+- Minimum length.
+- Maximum length.
+
+Allow downloading cleaned datasets.
+
+Keep a record of the processing parameters.
+
+==================================================
+11. TAXONOMIC IDENTIFICATION
+==================================================
+
+Implement a real DNA sequence identification workflow.
+
+Integrate:
+- NCBI BLAST.
+- NCBI Taxonomy.
+- BOLD Systems where supported.
+- Configurable local reference databases.
+
+For each sequence, retrieve:
+- Sequence ID.
+- Reference ID.
+- Scientific name.
+- Taxonomy ID.
+- Percentage identity.
+- Query coverage.
+- E-value.
+- Alignment score.
+- Reference database.
+- Taxonomic rank.
+
+Classify organisms into:
+
+Domain → Kingdom → Phylum → Class → Order → Family → Genus → Species.
+
+Provide a confidence assessment based on:
+- Sequence identity.
+- Query coverage.
+- E-value.
+- Reference quality.
+- Agreement among reference matches.
+
+Support:
+- Species-level identification.
+- Genus-level identification.
+- Family-level identification.
+- Higher-level classification.
+- Unclassified sequences.
+
+Use a lowest common ancestor approach where appropriate.
+
+Never fabricate a species identification or similarity score.
+
+Show database source and analysis status.
+
+==================================================
+12. BIODIVERSITY ANALYSIS
+==================================================
+
+Implement mathematically correct biodiversity calculations.
+
+Calculate:
+
+A. Species richness.
+
+B. Shannon diversity:
+
+H' = -Σ(pi ln pi)
+
+C. Simpson diversity:
+
+D = Σ(pi²)
+
+Also show 1-D.
+
+D. Pielou's evenness:
+
+J = H'/ln(S)
+
+E. Relative abundance.
+
+F. Alpha diversity.
+
+G. Beta diversity.
+
+Support:
+- Bray-Curtis dissimilarity.
+- Jaccard similarity.
+- Rarefaction curves.
+- Species accumulation curves.
+- Sample comparisons.
+
+Handle zero values and insufficient data safely.
+
+Clearly explain that sequencing read abundance is not necessarily equivalent to actual organism abundance.
+
+==================================================
+13. SPECIES EXPLORER
+==================================================
+
+Create a searchable species database.
+
+Display:
+- Scientific name.
+- Common name.
+- Kingdom.
+- Phylum.
+- Class.
+- Order.
+- Family.
+- Genus.
+- Species.
+- Taxonomy ID.
+- Sample detection.
+- Relative abundance.
+- Sequence identity.
+- Identification confidence.
+- Reference source.
+
+Filters:
+- Taxonomic rank.
+- Environmental sample.
+- Scientific name.
+- Identification confidence.
+
+Only show conservation and invasive-species classifications when supported by authoritative sources.
+
+==================================================
+14. GEOGRAPHIC BIODIVERSITY MAP
+==================================================
+
+Implement an interactive map.
+
+Allow users to add sample coordinates.
+
+Show:
+- Sample locations.
+- Species richness per location.
+- Shannon diversity per location.
+- Selected organism distribution.
+- Sample comparisons.
+
+Do not invent coordinates or species occurrence records.
+
+==================================================
+15. GEMINI AI RESEARCH ASSISTANT
+==================================================
+
+Integrate Gemini through a secure backend.
+
+Create a conversational scientific assistant.
+
+Example questions:
+
+- What organisms were found in my sample?
+- Explain my biodiversity results.
+- Which sample has the highest Shannon index?
+- What is the dominant phylum?
+- Compare two samples.
+- Explain taxonomic classification.
+- What are the limitations of this dataset?
+- Generate a research summary.
+
+The assistant must use actual database results as context.
+
+It must never invent scientific measurements or taxonomic matches.
+
+==================================================
+16. REPORT GENERATION
+==================================================
+
+Generate downloadable:
+- PDF reports.
+- CSV reports.
+- Taxonomic classification tables.
+- Biodiversity summary reports.
+
+Include:
+- Project details.
+- Sample metadata.
+- Processing information.
+- Taxonomic assignments.
+- Biodiversity metrics.
+- Visualizations.
+- Interpretation.
+- Limitations.
+- Reference database details.
+- Analysis date.
+
+==================================================
+17. HIDDEN ADMINISTRATOR PANEL
+==================================================
+
+Create a completely separate administrator environment.
+
+IMPORTANT: The administrator panel must not appear in:
+- Public navigation.
+- Ordinary user sidebar.
+- Ordinary user dashboard.
+- Public landing page.
+- Registration page.
+
+Create a separate protected admin route, such as:
+
+/control-center
+
+This route should only work for authorized administrators.
+
+Do not rely on an obscure URL or hidden frontend button as security.
+
+Implement real server-side role-based access control.
+
+ADMIN ROLE SYSTEM:
+
+Create two roles:
+
+1. user
+2. admin
+
+All new accounts must receive the default user role.
+
+Never allow users to select admin during registration.
+
+Administrator accounts must be provisioned manually through a trusted server-side process.
+
+Use verified Firebase UID and server-managed role records.
+
+Use Firebase custom claims or a protected server-side authorization table as the authoritative admin authorization mechanism.
+
+Never trust role values from:
+- Frontend state.
+- Local storage.
+- URL parameters.
+- Registration forms.
+- User-editable Firestore documents.
+
+ADMIN LOGIN:
+
+Provide a separate admin login route.
+
+Authenticate with Firebase Authentication.
+
+Verify the administrator's authorization on the server.
+
+If the user is not an authorized administrator:
+- Deny access.
+- Do not render admin data.
+- Redirect to the regular dashboard or an unauthorized page.
+
+ADMIN DASHBOARD:
+
+Create these sections:
+
+A. Overview:
+- Total registered users.
+- Active users.
+- Total projects.
+- Total uploaded datasets.
+- Total sequences processed.
+- Total analyses completed.
+- Failed analysis jobs.
+- Total identified taxa.
+
+B. User Management:
+- View registered users.
+- Search by name or email.
+- View user profile.
+- View account creation date.
+- View account status.
+- Disable or enable accounts.
+- Change roles through a secure authorization workflow.
+- Delete accounts through a controlled process.
+
+C. Dataset Management:
+- View dataset metadata.
+- View upload status.
+- View associated user and project.
+- View file size.
+- Review processing status.
+- Delete inappropriate or unwanted files according to policy.
+
+D. Analysis Monitoring:
+- View pending jobs.
+- View processing jobs.
+- View completed jobs.
+- View failed jobs.
+- View processing errors.
+- Retry eligible failed jobs.
+
+E. Scientific Data Overview:
+- Taxonomic identification statistics.
+- Biodiversity analysis statistics.
+- Most frequently detected taxa.
+- Database usage statistics.
+
+F. System Settings:
+- API connection status.
+- Firebase status.
+- Supabase status.
+- Gemini connection status.
+- Reference database connection status.
+- Processing configuration.
+
+G. Audit Logs:
+- Administrator logins.
+- User role changes.
+- Account actions.
+- Dataset deletion.
+- System configuration changes.
+
+Record who performed each administrative action and when.
+
+Only authorized administrators may access this information.
+
+==================================================
+18. DATABASE STRUCTURE
+==================================================
+
+FIREBASE FIRESTORE COLLECTIONS:
+
+users:
+- uid
+- fullName
+- email
+- country
+- institution
+- userCategory
+- emailVerified
+- createdAt
+- updatedAt
+- preferences
+
+Keep authorization roles server-controlled.
+
+SUPABASE POSTGRESQL TABLES:
+
+profiles:
+- id
+- firebase_uid
+- full_name
+- email
+- created_at
+
+projects:
+- id
+- owner_uid
+- project_name
+- description
+- research_objective
+- created_at
+
+samples:
+- id
+- project_id
+- owner_uid
+- sample_name
+- sample_type
+- collection_date
+- latitude
+- longitude
+- marker
+
+datasets:
+- id
+- sample_id
+- owner_uid
+- storage_path
+- file_name
+- file_format
+- file_size
+- sequence_count
+- upload_status
+
+sequences:
+- id
+- dataset_id
+- sequence_id
+- sequence_length
+- sequence_data
+- quality_score
+
+taxonomic_assignments:
+- id
+- sequence_id
+- scientific_name
+- taxonomy_id
+- taxonomic_rank
+- percentage_identity
+- query_coverage
+- e_value
+- confidence
+- reference_source
+
+biodiversity_results:
+- id
+- sample_id
+- species_richness
+- shannon_index
+- simpson_index
+- pielou_evenness
+- analysis_date
+
+analysis_jobs:
+- id
+- owner_uid
+- project_id
+- sample_id
+- job_status
+- progress
+- error_message
+- created_at
+- completed_at
+
+reports:
+- id
+- owner_uid
+- project_id
+- report_name
+- storage_path
+- created_at
+
+audit_logs:
+- id
+- actor_uid
+- action
+- target_id
+- timestamp
+- details
+
+Use UUID primary keys where appropriate and foreign keys to maintain referential integrity.
+
+Create appropriate indexes.
+
+Avoid storing unnecessary large DNA sequences in Firestore.
+
+For large datasets, use Supabase Storage for original files and appropriate database storage or partitioning for processed sequences.
+
+==================================================
+19. SECURITY REQUIREMENTS
+==================================================
+
+Implement strict security.
+
+1. Verify Firebase ID tokens on the backend.
+2. Enforce ownership on all user-specific records.
+3. Enable Supabase Row Level Security.
+4. Apply restrictive default database permissions.
+5. Use service-role credentials only in trusted server environments.
+6. Keep API secrets in environment variables.
+7. Validate uploaded file types and contents.
+8. Restrict file sizes.
+9. Prevent unauthorized database operations.
+10. Protect administrator endpoints.
+11. Prevent ordinary users from changing roles.
+12. Log privileged operations.
+13. Use secure storage access policies.
+14. Prevent users from accessing other users' private files.
+15. Handle session expiration correctly.
+
+For Supabase RLS, use a trusted identity verification strategy that securely maps Firebase identities to database access. Do not assume Supabase automatically trusts Firebase tokens without explicit configuration.
+
+Ensure that admin access is checked independently of ordinary user access policies.
+
+==================================================
+20. ERROR HANDLING AND PERFORMANCE
+==================================================
+
+Implement:
+- Loading skeletons.
+- Error messages.
+- Empty states.
+- Retry options.
+- Upload progress.
+- Analysis progress.
+- Background jobs.
+- Pagination.
+- Database query optimization.
+- Secure file downloads.
+- Responsive design.
+
+Large datasets must not block the browser.
+
+Use asynchronous processing and report job status to the frontend.
+
+==================================================
+21. DEMONSTRATION MODE
+==================================================
+
+Provide a demonstration project with illustrative DNA sequences and clearly labeled simulated reference matches.
+
+Allow users to test:
+- Upload.
+- Preprocessing.
+- Taxonomic results.
+- Biodiversity metrics.
+- Visualizations.
+- Reports.
+
+Never mix demonstration data with real datasets.
+
+Never claim simulated results came from NCBI or BOLD.
+
+==================================================
+22. IMPLEMENTATION AND DELIVERY REQUIREMENTS
+==================================================
+
+Build the application in stages:
+
+Stage 1:
+- Complete UI.
+- Landing page.
+- Registration.
+- Login.
+- Forgot password.
+- User dashboard.
+
+Stage 2:
+- Firebase Authentication.
+- Firestore profile management.
+- Supabase PostgreSQL.
+- Supabase Storage.
+- Secure backend integration.
+
+Stage 3:
+- Project management.
+- Dataset uploads.
+- DNA preprocessing.
+- Taxonomic identification.
+
+Stage 4:
+- Biodiversity calculations.
+- Charts.
+- Species explorer.
+- Geographic visualization.
+
+Stage 5:
+- Gemini assistant.
+- PDF and CSV reports.
+
+Stage 6:
+- Hidden administrator panel.
+- Role-based authorization.
+- Audit logging.
+- Security testing.
+
+Stage 7:
+- Complete end-to-end testing.
+- Mobile responsiveness.
+- Error handling.
+- Deployment documentation.
+
+Do not stop after creating the frontend.
+
+Do not use fake authentication.
+
+Do not simulate successful database writes.
+
+Do not create buttons that have no functionality.
+
+Do not claim that external services work until their integration has been tested.
+
+Before completion, provide:
+
+1. Complete project source code.
+2. Firebase configuration instructions.
+3. Firestore security rules.
+4. Supabase database SQL migrations.
+5. Supabase RLS policies.
+6. Supabase Storage policies.
+7. Backend deployment instructions.
+8. Gemini API setup.
+9. NCBI BLAST integration instructions.
+10. Administrator account provisioning instructions.
+11. Environment variable template.
+12. Testing instructions.
+13. Production deployment guide.
+
+FINAL REQUIREMENT:
+
+Deliver a complete, secure, visually impressive, scientifically reliable EcoDNA AI platform with public registration, secure authentication, individual user dashboards, Firebase identity management, Supabase scientific data storage, real eDNA analysis integrations, AI-assisted research, downloadable reports, and a completely separate, hidden, role-protected administrator panel.
+
+The project must be suitable for a professional college-level project demonstration and future expansion into a real scientific research platform.
+
+### 2\. Additional Firebase and Supabase setup prompts
+
+After the master prompt, use these prompts separately.
+
+A. Firebase integration prompt
+
+Now implement the complete Firebase integration.
+
+Connect Firebase Authentication and Cloud Firestore.
+
+Implement email/password registration, Google authentication, email verification, login, logout, forgot password, password reset, session persistence, and user profile management.
+
+Create Firestore user profile documents automatically after successful registration.
+
+Ensure new users receive only the default user role.
+
+Implement Firestore security rules. Users must only be able to access and modify their permitted profile fields.
+
+Do not allow users to modify their authorization role or privilege fields.
+
+Create a secure administrator provisioning process using Firebase Admin SDK on the trusted backend.
+
+Test the complete authentication lifecycle and provide Firebase console configuration instructions.
+
+Do not use mock authentication or hardcoded login credentials.
+
+B. Supabase integration prompt
+
+Now implement the complete Supabase backend.
+
+Connect Supabase PostgreSQL and Supabase Storage.
+
+Create all database tables, relationships, indexes, migrations, and Row Level Security policies.
+
+Integrate Firebase Authentication with Supabase through a secure backend verification layer.
+
+Verify Firebase ID tokens before accepting any protected request.
+
+Use the verified Firebase UID to enforce data ownership.
+
+Create private storage buckets for user datasets and generated reports.
+
+Implement secure file uploads, downloads, and deletion.
+
+Ensure users cannot read, update, or delete another user's private datasets, projects, samples, or reports.
+
+Create separate administrator permissions that are verified on the backend.
+
+Never expose the Supabase service-role key in frontend code.
+
+Provide complete SQL migrations and deployment instructions.
+
+C. Admin security testing prompt
+
+Perform a security audit of the EcoDNA AI administrator system.
+
+Test the following:
+
+1. An ordinary user cannot access /control-center.
+2. An ordinary user cannot access administrator APIs directly.
+3. An ordinary user cannot assign themselves the admin role.
+4. Changing local storage does not grant admin access.
+5. Modifying frontend JavaScript does not grant admin access.
+6. Modifying a URL does not grant admin access.
+7. An unauthorized Firebase account is denied administrator privileges.
+8. Admin database operations require server-side authorization.
+9. Users cannot access another user's private datasets.
+10. Revoked administrator privileges take effect.
+
+Fix all vulnerabilities discovered.
+
+The admin panel must be hidden from public navigation, but its actual security must come from backend authorization and database access policies.
+
+### 3\. How to set up the services
+
+You will need accounts on these platforms:
+
+![Free Firebase Icon Logo Vector Download | Logowik](https://images.openai.com/static-rsc-4/fuPuaL1Yv5hfYZ0I1N3FWAl8pPwzV20Bpqkrcpd9jckfhevcIEf2kmuhpv9aKQyA_-hNU1BRr_MN3nKC9TkJ_haPvQhpmeQ0EL-uJI9lEvUdjMRL4nwNY8wWYhyUEkAlDj54C1Ao3IaAzwuDYZJoQH24_Cb_bmiCilhtI4hw33dg_meTmEw0e-y_0eDY-1_N?purpose=fullsize)
+
+Firebase
+
+Authentication and Firestore database
+
+[Open Firebase Console](https://console.firebase.google.com/?utm_source=chatgpt.com)
+
+![Supabase - Review, Pricing & Alternatives | Delv](https://images.openai.com/static-rsc-4/OD-Bs0qPhplyWx6suHW7qDv2sdwffdH6NiepzixDJjZ-d-cF58FSQaZmf3PF2jRH1EM73gkGKKgscHYrOEjvzWzyftA79eFjwYYRujYa9fBTPoD7JMPYtwOZLNkfClAU-MMSEjdppwISF3NX_CiKdRbr29-FlAlFa2P48C-AFr7WxgOQ6PNJ9gracskXca6Z?purpose=fullsize)
+
+Supabase
+
+PostgreSQL, storage and backend functions
+
+[Open Supabase Dashboard](https://supabase.com/dashboard?utm_source=chatgpt.com)
+
+![Produtos para desenvolvedores: Google for Developers](https://images.openai.com/static-rsc-4/ntDZYKMOsnRQjxuXE5nMmi-TLOougTHnAYE1Z0frRcD4hR0o6DMmDXJbHuzJ--hRl66DlP6MBTkC2qiPzk9gi3LWb4Ie9vBHV1miSM4CT0mYbdyyfojEN1yB-cDoWqlpJGI8OlKS0LqWEUXp5a_IYpFnHw2GhtMtx_2-5v_9J2fRmgnM2vYBOalJz4H-EcTe?purpose=fullsize)
+
+Google AI Studio
+
+Application generation and Gemini integration
+
+[Open Google AI Studio](https://aistudio.google.com/?utm_source=chatgpt.com)
+
+![The National Center for Biotechnology Information Logo PNG Vector (CDR) Free Download](https://images.openai.com/static-rsc-4/si3k176MYqvOUKGqWo6d7yp8723UkAdVrPNvAvmAN_pyLEuhDFC_mpeUwe6Fj1IOQnOsHtjAKck6ZHCgtHHd7eT7qlE9rlzPLDtDQnGnDMxiCD94tPAzfO1pEyklMDVu5b5UwMVpRDE5txcWqXBF_BzCxKaTIx88OnYvBb10CH8dw6MFGWriJX8wrlxwqdih?purpose=fullsize)
+
+NCBI
+
+DNA reference data and BLAST
+
+[Open NCBI BLAST](https://blast.ncbi.nlm.nih.gov/?utm_source=chatgpt.com)
+
+### 4\. Important implementation advice
+
+There are three things I particularly want you to get right:
+
+* Don't compromise authentication: Everyone should be able to register, but nobody should be able to register as an admin.
+
+* Don't compromise scientific accuracy: Actual DNA matching must use reference databases, not AI-generated organism names.
+
+* Don't compromise data security: Firebase and Supabase must enforce permissions on the backend, not merely through frontend navigation.
+
+Also, Google AI Studio may generate the frontend and initial backend integration, but you will still need to configure Firebase, Supabase, API credentials, database policies and deployment.
+
+### 5\. Recommended final application structure
+
+![WildMon](https://images.openai.com/static-rsc-4/TePGSRDh4Lp8SQ_Lu6q6U8rz1uODWW3WB_HaQsLDUFBZyds1rCQLgGgeXyogg5rPiFmB0FeSMYejbsKINyfukqgQMRfZcOknQ2XXQhNpuFTTUb-FBLgicKAJXvJWSwZ_FLtyCsYuVIwj91yRYDyBbk6ptAsCRI1tzv_qrU9kQ1NWxeiO33JG34xzXABCBZdJ?purpose=fullsize)
+
+Your final application should have three distinct experiences:
+
+* Public: Landing page, registration, login and project information.
+
+* Registered users: Personal research dashboard, dataset analysis, species identification and reports.
+
+* Administrators: Hidden `/control-center` environment with user management, database monitoring, analysis monitoring and audit logs.
+
+My recommendation: Build the authentication and database integration first, verify that they work, and only then develop the scientific analysis modules. This will save you considerable debugging time.
+
+Next, I can guide you through creating the Firebase project and Supabase database step by step, including the exact settings and SQL you need to paste.
